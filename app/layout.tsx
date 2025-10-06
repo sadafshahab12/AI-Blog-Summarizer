@@ -18,6 +18,7 @@ export const metadata: Metadata = {
     "Turn long blog posts into clear, concise summaries with AI Blog Summarizer. Built with Next.js, TypeScript, and Google Gemini — fast, accurate, and free to use.",
   keywords: [
     "AI blog summarizer",
+    "AI summarizer",
     "blog summarizer by URL",
     "Gemini AI summarizer",
     "Next.js AI tool",
