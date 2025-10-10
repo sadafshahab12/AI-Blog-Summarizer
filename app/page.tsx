@@ -6,10 +6,12 @@ export default function Home() {
   const [url, setUrl] = useState("");
   const [summary, setSummary] = useState("");
   const [loading, setLoading] = useState(false);
-
+  const [copied, setCopied] = useState(false);
+  const [typingDone, setTypingDone] = useState(false);
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setSummary("");
+    setTypingDone(false);
     setLoading(true);
 
     const res = await fetch("/api/summarize", {
@@ -39,7 +41,13 @@ export default function Home() {
 
     setLoading(false);
   }
-
+  const copySummary = () => {
+    navigator.clipboard.writeText(summary);
+    setCopied(true);
+    setTimeout(() => {
+      setCopied(false);
+    }, 2000);
+  };
   return (
     <main className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-gray-100 flex flex-col items-center justify-center px-6 py-12">
       {/* Card container */}
@@ -84,16 +92,28 @@ export default function Home() {
               <p className="text-gray-400 animate-pulse">⏳ Summarizing...</p>
             ) : summary ? (
               <TypeAnimation
-                sequence={[summary]}
+                sequence={[summary, () => setTypingDone(true)]}
                 speed={60}
-                cursor={true}
+                cursor={!typingDone}
                 style={{ whiteSpace: "pre-wrap", display: "block" }}
               />
             ) : (
               <p className="text-gray-500">No summary yet.</p>
             )}
           </div>
-          <button>Copy</button>
+          <button
+            onClick={copySummary}
+            disabled={!summary}
+            className={`mt-3 px-5 py-2 rounded-lg text-sm font-medium transition-all duration-200 border ${
+              summary
+                ? copied
+                  ? "bg-emerald-400 text-gray-900 border-emerald-400"
+                  : "border-emerald-400 text-emerald-300 hover:bg-emerald-400 hover:text-gray-900"
+                : "border-gray-700 text-gray-500 cursor-not-allowed"
+            }`}
+          >
+            {copied ? "Copied!" : "Copy Summary"}
+          </button>
         </section>
       </div>
 
