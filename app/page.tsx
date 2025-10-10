@@ -1,5 +1,6 @@
 "use client";
 import { FormEvent, useState } from "react";
+import { TypeAnimation } from "react-type-animation";
 
 export default function Home() {
   const [url, setUrl] = useState("");
@@ -52,6 +53,7 @@ export default function Home() {
           className="flex flex-col sm:flex-row gap-3 mb-6"
         >
           <input
+            autoFocus
             type="url"
             required
             placeholder="Paste blog URL..."
@@ -78,14 +80,32 @@ export default function Home() {
           </h2>
 
           <div className="bg-gray-900/60 rounded-xl border border-gray-700 p-4 min-h-[150px] whitespace-pre-wrap text-sm leading-relaxed text-gray-200">
-            {summary ||
-              (loading ? "⏳ Waiting for model response..." : "No summary yet.")}
+            {loading ? (
+              <p className="text-gray-400 animate-pulse">⏳ Summarizing...</p>
+            ) : summary ? (
+              <TypeAnimation
+                sequence={[summary]}
+                speed={60}
+                cursor={true}
+                style={{ whiteSpace: "pre-wrap", display: "block" }}
+              />
+            ) : (
+              <p className="text-gray-500">No summary yet.</p>
+            )}
           </div>
+          <button>Copy</button>
         </section>
       </div>
 
-      <footer className="mt-6 text-xs text-gray-500">
-        Built by <span className="text-emerald-400 font-semibold">Sadaf Shahab</span> 💚
+      <footer className="mt-10 text-xs text-gray-500">
+        Made with 💚 by{" "}
+        <a
+          href="https://sadaf-shahab-mern-stack-developer-p.vercel.app/"
+          target="_blank"
+          className="text-emerald-400 hover:underline"
+        >
+          Sadaf Shahab
+        </a>
       </footer>
     </main>
   );
